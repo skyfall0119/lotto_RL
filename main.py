@@ -19,12 +19,10 @@ def main():
     
     
     ## 데이터 업데이트
-    nc.updateCSV(drw_dir)
-    
     ## load data
-    ## 데이터 받기
-    df = pd.read_csv(drw_dir)
+    df = nc.updateCSV(drw_dir)
     numList = df[['num1','num2','num3','num4','num5','num6']].values.tolist()
+    
     
     ## 강화학습 클래스
     
@@ -43,5 +41,6 @@ def main():
 
 
 if __name__ == "__main__":
-    # inst_all_from_requirements('./setting/requirements.txt')
+    inst_all_from_requirements('./setting/requirements.txt')
+    
     main()

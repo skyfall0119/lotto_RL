@@ -119,3 +119,5 @@ def updateCSV(csv_path) :
         # new csv
         updated.to_csv(csv_path, index=False)
         
+    return nums
+        

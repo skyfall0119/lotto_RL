@@ -1,3 +1,10 @@
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+test.py
+
+
 # Editors
 .vscode/
 .idea/
@@ -109,8 +116,3 @@ venv.bak/
 
 # mkdocs documentation
 /site
-
-# mypy
-.mypy_cache/
-.dmypy.json
-dmypy.json
