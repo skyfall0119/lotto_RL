@@ -54,8 +54,15 @@ def getMaxRound():
     url = "https://dhlottery.co.kr/common.do?method=main"
     html = requests.get(url).text
     soup = BeautifulSoup(html, "lxml")
-    max_numb = soup.find(name="strong", attrs={"id": "lottoDrwNo"}).text
-    return int(max_numb)
+
+    try :
+        # max_numb = soup.find(name="strong", attrs={"id": "lottoDrwNo"}).text
+        max_numb = soup.select_one('h2.time > strong').text
+        return int(max_numb)
+    except AttributeError:
+        print("서버 에러")
+        return -1
+        
 
 ## csv file update 
 def updateCSV(csv_path) :
@@ -71,7 +78,8 @@ def updateCSV(csv_path) :
         new = False
         
         if startInd > maxRound :
-            print("이미 최신임.") 
+            print("최신입니다.") 
+            
         else : 
             print(f"{startInd}회차부터 다운..")
         
@@ -110,7 +118,8 @@ def updateCSV(csv_path) :
         
     
     if updated.empty :
-        print("업데이트 안함.")
+        # print("업데이트 안함.")
+        pass
     elif not new:
         ## update existing csv
         nums = pd.concat([nums, updated], ignore_index=True)
@@ -120,4 +129,7 @@ def updateCSV(csv_path) :
         updated.to_csv(csv_path, index=False)
         
     return nums
-        
+
+
+if __name__ == "__main__" :
+    print(getMaxRound())

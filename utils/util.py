@@ -1,4 +1,11 @@
 import numpy as np
+import subprocess, sys
+from enum import Enum
+
+
+def inst_all_from_requirements(requirement_file):
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", requirement_file])
+
 
 
 
@@ -16,3 +23,4 @@ def oneHot2Num(oneHot) :
             numbers.append(i+1) 
     
     return numbers
+
