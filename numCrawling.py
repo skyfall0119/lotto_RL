@@ -56,11 +56,11 @@ def getMaxRound():
     soup = BeautifulSoup(html, "lxml")
 
     try :
-        # max_numb = soup.find(name="strong", attrs={"id": "lottoDrwNo"}).text
-        max_numb = soup.select_one('h2.time > strong').text
+        max_numb = soup.find(name="strong", attrs={"id": "lottoDrwNo"}).text
+        # max_numb = soup.select_one('h2.time > strong').text
         return int(max_numb)
-    except AttributeError:
-        print("서버 에러")
+    except AttributeError as e:
+        print("서버 에러", e)
         return -1
         
 
