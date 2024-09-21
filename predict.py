@@ -17,18 +17,18 @@ def predict(modelname : str):
     drw_dir = os.environ['DRW_DIR']
     
     
-    ## 데이터 업데이트
-    ## load data
+    ######## 데이터 업데이트 & 로드
     print("1. 로또 번호 업데이트 ...")
     df = nc.updateCSV(drw_dir)
-    # numList = df[['num1','num2','num3','num4','num5','num6']].values.tolist()
     print(f"최신 회차 {df.iloc[-1]['round']}화. {df.iloc[-1]['date']} \n")
+    numList = df[['num1','num2','num3','num4','num5','num6']].values.tolist()
     # print(df.iloc[-1])
     # round          1137
     # date     2024-09-14
     # Name: 1136, dtype: object
     
-    ## 강화학습 모델 로드
+    
+    ######## 모델 로드
     print(f"2. 모델 {modelname} 로딩중...")
     model = None
     path = os.path.join("models", modelname)
@@ -36,6 +36,7 @@ def predict(modelname : str):
         model = PPO.load(path)
     except Exception as e :
         print("모델 로딩 에러", e)
+        return
     if model is not None :        
         print(f"2. 모델 {modelname} 로딩 완료\n")
     
@@ -44,8 +45,20 @@ def predict(modelname : str):
     print("\nLOTTO PREDICTION!!!!\n")
     print("*"*30)
     
-    ## TODO
-    ## 메인 predict
+
+    ######## predict
+    # env load
+    if modelname == "Env_v1" :
+        env = Env_v1(numList=numList)
+    elif modelname == "Env_v2" :
+        env = Env_v2(numList=numList)
+    
+    # reset env
+    pred = env.predict(model=model)
+    
+    for i, num in enumerate(pred) :
+        print(f"{i+1}. 예측번호 {num}")
+    
 
 
 if __name__ == "__main__":

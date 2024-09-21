@@ -105,6 +105,30 @@ class Env_v1(gym.Env) :
             return 100
         else :
             return -1
+    
+    def predict(self, model, num_repeats=5):
+        self.reset()
+        predictions = []
+        
+        for _ in range(num_repeats):
+            # Reset the environment to the latest state
+            self.ind = len(self.numList) - 1
+            self.state = util.num2OneHot(self.numList[-1])
+            observation = self.state
+
+            # Get the predicted action from the model
+            action, _states = model.predict(observation)
+
+            # Decode the action to get the predicted lottery numbers
+            predicted_numbers = self._pickNumber(action)
+
+            # Convert one-hot encoded action to the actual numbers
+            predicted_numbers_list = util.oneHot2Num(predicted_numbers)
+            predictions.append(predicted_numbers_list)
+        
+        return predictions
+    
+    
 
 
 """
@@ -218,3 +242,22 @@ class Env_v2(gym.Env) :
             # else :
             #     total-=1
         return total
+    
+    def predict(self, model):
+        self.reset()
+        
+        # Reset the environment to the latest state
+        self.ind = len(self.numList) - 1
+        self.state = util.num2OneHot(self.numList[-1])
+        observation = self.state
+
+        # Get the predicted action from the model
+        action, _states = model.predict(observation)
+
+        # Decode the action to get the predicted lottery numbers
+        predicted_numbers = self.pickNumber(action)
+        
+        # for i, num in enumerate(predicted_numbers) :
+        #     predicted_numbers[i] = util.oneHot2Num(num)
+        
+        return [util.oneHot2Num(x) for x in predicted_numbers]
